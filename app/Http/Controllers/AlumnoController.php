@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAlumnoRequest;
-use App\Http\Requests\UpdateAlumnoRequest;
 use App\Models\Alumno;
+use Illuminate\Http\Request;
 
 class AlumnoController extends Controller
 {
@@ -13,7 +12,7 @@ class AlumnoController extends Controller
      */
     public function index()
     {
-        //
+        return view('alumnos.index', ['alumnos' => Alumno::all()]);
     }
 
     /**
@@ -21,15 +20,23 @@ class AlumnoController extends Controller
      */
     public function create()
     {
-        //
+        return view('alumnos.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAlumnoRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.max' => 'El nombre debe contener menos de 255 caracteres.',
+        ]);
+        Alumno::create($validated);
+        session()->flash('exito', 'Alumno creado correctamente.');
+        return redirect()->route('alumnos.index');
     }
 
     /**
@@ -37,7 +44,9 @@ class AlumnoController extends Controller
      */
     public function show(Alumno $alumno)
     {
-        //
+        return view('alumnos.show', [
+            'alumno'=>$alumno
+        ]);
     }
 
     /**
@@ -45,15 +54,26 @@ class AlumnoController extends Controller
      */
     public function edit(Alumno $alumno)
     {
-        //
+        return view('alumnos.edit', [
+            'alumno'=>$alumno
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAlumnoRequest $request, Alumno $alumno)
+    public function update(Request $request, Alumno $alumno)
     {
-        //
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.max' => 'El nombre debe contener menos de 255 caracteres.',
+        ]);
+        $alumno->fill($validated);
+        $alumno->save();
+        session()->flash('exito', 'Alumno modificado correctamente.');
+        return redirect()->route('alumnos.index');
     }
 
     /**
@@ -61,6 +81,7 @@ class AlumnoController extends Controller
      */
     public function destroy(Alumno $alumno)
     {
-        //
+        $alumno->delete();
+        return redirect()->route('alumnos.index');
     }
 }
