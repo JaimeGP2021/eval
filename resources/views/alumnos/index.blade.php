@@ -15,6 +15,9 @@
                                     <th scope="col" class="px-6 py-3">
                                         Nombre
                                     </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nota final
+                                    </th>
                                     <th colspan="2" scope="col" class="px-6 py-3">
                                         Acciones
                                     </th>
@@ -29,6 +32,19 @@
                                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                                 {{ $alumno->nombre }}
                                             </a>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @php
+                                                $total=0;
+                                                $cont=0;
+                                            @endphp
+                                            @foreach ($alumno->notas as $nota)
+                                                @php
+                                                    $total += $nota->nota;
+                                                    $cont++;
+                                                @endphp
+                                            @endforeach
+                                            {{ $total/$cont }}
                                         </td>
                                         <td class="px-6 py-4 flex items-center gap-2">
                                             <a href="{{ route('alumnos.edit', $alumno) }}"
