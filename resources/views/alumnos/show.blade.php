@@ -19,6 +19,19 @@
                             </dd>
                         </div>
                     </dl>
+                    @if ($alumno->notas()->exists())
+                    <br>
+                        <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Calificaciones:</h2>
+                        <ol class="max-w-screen-2xl space-y-1 text-gray-500 list-decimal list-inside dark:text-gray-400">
+                            @foreach ($alumno->notas as $nota)
+                            <li>
+                                CE:
+                                <span class="font-semibold text-gray-900 dark:text-white">{{$nota->ce->ce}}</span> --- Nota:
+                                <span class="font-semibold text-gray-900 dark:text-white">{{$nota->nota}}</span>
+                            </li>
+                            @endforeach
+                        </ol>
+                    @endif
                 </div>
             </div>
         </div>
